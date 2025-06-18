@@ -407,6 +407,40 @@
                 align-items: flex-end;
             }
         }
+
+                .cart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .cart-item {
+            background: rgba(10, 10, 26, 0.8);
+            border: 1px solid var(--neon-blue);
+            border-radius: 10px;
+            padding: 15px;
+            position: relative;
+        }
+        .cart-item img {
+            width: 100%;
+            border-radius: 5px;
+        }
+        .cart-item-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cart-total {
+            text-align: right;
+            padding: 20px;
+            font-size: 1.2em;
+        }
     </style>
 </head>
 <body>
@@ -423,240 +457,126 @@
         </div>
     </header>
 
-    <div class="cart-container">
-        <!-- Основное содержимое корзины -->
-        <div class="cart-items">
-            <div class="cart-header">
-                <h2 class="cart-title">Ваша корзина</h2>
-                <div class="cart-count">3 товара</div>
-            </div>
-            
-            <!-- Список товаров -->
-            <div class="cart-items-list">
-                <!-- Товар 1 -->
-                <div class="cart-item">
-                    <img src="img/main-albom/6ZwlCGtYWdI.jpg" alt="Album Cover" class="cart-item-cover">
-                    <div class="cart-item-info">
-                        <h3 class="cart-item-title">Angel Of Small Death</h3>
-                        <p class="cart-item-artist">Hozier</p>
-                        <p class="cart-item-price">2,499 ₽</p>
-                        <div class="cart-item-actions">
-                            <div class="quantity-control">
-                                <button class="quantity-btn minus">-</button>
-                                <input type="text" class="quantity-input" value="1" readonly>
-                                <button class="quantity-btn plus">+</button>
-                            </div>
-                            <button class="remove-item">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                </svg>
-                                Удалить
-                            </button>
-                        </div>
-                    </div>
-                    <div class="cart-item-total">
-                        <p class="item-total-price">2,499 ₽</p>
-                    </div>
-                </div>
-                
-                <!-- Товар 2 -->
-                <div class="cart-item">
-                    <img src="img/main-albom/laIqhWYx68g.jpg" alt="Album Cover" class="cart-item-cover">
-                    <div class="cart-item-info">
-                        <h3 class="cart-item-title">Control</h3>
-                        <p class="cart-item-artist">Biting Elbows</p>
-                        <p class="cart-item-price">1,999 ₽</p>
-                        <div class="cart-item-actions">
-                            <div class="quantity-control">
-                                <button class="quantity-btn minus">-</button>
-                                <input type="text" class="quantity-input" value="1" readonly>
-                                <button class="quantity-btn plus">+</button>
-                            </div>
-                            <button class="remove-item">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                </svg>
-                                Удалить
-                            </button>
-                        </div>
-                    </div>
-                    <div class="cart-item-total">
-                        <p class="item-total-price">1,999 ₽</p>
-                    </div>
-                </div>
-                
-                <!-- Товар 3 -->
-                <div class="cart-item">
-                    <img src="img/main-albom/_xQdZKn79bE.jpg" alt="Album Cover" class="cart-item-cover">
-                    <div class="cart-item-info">
-                        <h3 class="cart-item-title">Mercy</h3>
-                        <p class="cart-item-artist">Dotan</p>
-                        <p class="cart-item-price">2,199 ₽</p>
-                        <div class="cart-item-actions">
-                            <div class="quantity-control">
-                                <button class="quantity-btn minus">-</button>
-                                <input type="text" class="quantity-input" value="1" readonly>
-                                <button class="quantity-btn plus">+</button>
-                            </div>
-                            <button class="remove-item">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                </svg>
-                                Удалить
-                            </button>
-                        </div>
-                    </div>
-                    <div class="cart-item-total">
-                        <p class="item-total-price">2,199 ₽</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Пустая корзина (пример) -->
-            <!--
-            <div class="empty-cart">
-                <div class="empty-cart-icon">🛒</div>
-                <h3 class="empty-cart-message">Ваша корзина пуста</h3>
-                <a href="#" class="continue-shopping">Продолжить покупки</a>
-            </div>
-            -->
+    <div class="main-content">
+        <h1>Ваша корзина</h1>
+        <div class="cart-container" id="cartItems">
+            <!-- Тут будут динамически добавляться товары -->
         </div>
-        
-        <!-- Итоговая информация -->
-        <div class="order-summary">
-            <h2 class="summary-title">Итог заказа</h2>
-            
-            <div class="summary-row">
-                <span class="summary-label">Товары (3)</span>
-                <span class="summary-value">6,697 ₽</span>
-            </div>
-            
-            <div class="summary-row">
-                <span class="summary-label">Доставка</span>
-                <span class="summary-value">Бесплатно</span>
-            </div>
-            
-            <div class="summary-row">
-                <span class="summary-label">Скидка</span>
-                <span class="summary-value">-500 ₽</span>
-            </div>
-            
-            <div class="summary-row summary-total">
-                <span class="summary-label">Итого</span>
-                <span class="summary-value">6,197 ₽</span>
-            </div>
-            
-            <button class="checkout-btn">Оформить заказ</button>
-            
-            <div style="margin-top: 20px; font-size: 14px; color: #aaa; text-align: center;">
-                Нажимая кнопку, вы соглашаетесь с условиями обработки персональных данных
-            </div>
+        <div class="cart-total">
+            Итого: <span id="cartTotal">0</span> ₽
         </div>
     </div>
 
+    <!-- Подключение скриптов -->
+    <script src="js/cart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Обработчики изменения количества товаров
-            document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const input = this.parentElement.querySelector('.quantity-input');
-                    input.value = parseInt(input.value) + 1;
-                    updateCartItemTotal(this.closest('.cart-item'));
-                });
-            });
-            
-            document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const input = this.parentElement.querySelector('.quantity-input');
-                    if (parseInt(input.value) > 1) {
-                        input.value = parseInt(input.value) - 1;
-                        updateCartItemTotal(this.closest('.cart-item'));
-                    }
-                });
-            });
-            
-            // Обработчики удаления товара
-            document.querySelectorAll('.remove-item').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const cartItem = this.closest('.cart-item');
-                    cartItem.style.animation = 'fadeOut 0.3s forwards';
-                    setTimeout(() => {
-                        cartItem.remove();
-                        updateCartSummary();
-                        checkEmptyCart();
-                    }, 300);
-                });
-            });
-            
-            // Инициализация
-            updateCartSummary();
-            
-            // Функция обновления итоговой суммы для товара
-            function updateCartItemTotal(item) {
-                const price = parseFloat(item.querySelector('.cart-item-price').textContent.replace(/[^\d.]/g, ''));
-                const quantity = parseInt(item.querySelector('.quantity-input').value);
-                const total = (price * quantity).toFixed(2);
-                item.querySelector('.item-total-price').textContent = total.replace('.', ',') + ' ₽';
-                updateCartSummary();
+    // Загрузка корзины при открытии страницы
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadCart();
+    });
+
+    // Функция загрузки корзины из БД
+    async function loadCart() {
+        try {
+            if (!isUserLoggedIn()) {
+                window.location.href = 'index.html';
+                return;
             }
-            
-            // Функция обновления итоговой информации
-            function updateCartSummary() {
-                let itemsCount = 0;
-                let subtotal = 0;
-                
-                document.querySelectorAll('.cart-item').forEach(item => {
-                    const quantity = parseInt(item.querySelector('.quantity-input').value);
-                    const price = parseFloat(item.querySelector('.item-total-price').textContent.replace(/[^\d.]/g, ''));
-                    
-                    itemsCount += quantity;
-                    subtotal += price;
-                });
-                
-                // Обновляем счетчик товаров
-                document.querySelector('.cart-count').textContent = itemsCount + ' ' + getNoun(itemsCount, 'товар', 'товара', 'товаров');
-                
-                // Обновляем суммы
-                const discount = 500; // Пример скидки
-                const total = subtotal - discount;
-                
-                document.querySelector('.summary-row:nth-child(1) .summary-value').textContent = subtotal.toFixed(2).replace('.', ',') + ' ₽';
-                document.querySelector('.summary-row:nth-child(3) .summary-value').textContent = '-' + discount.toFixed(2).replace('.', ',') + ' ₽';
-                document.querySelector('.summary-total .summary-value').textContent = total.toFixed(2).replace('.', ',') + ' ₽';
-            }
-            
-            // Функция проверки пустой корзины
-            function checkEmptyCart() {
-                const cartItems = document.querySelectorAll('.cart-item');
-                if (cartItems.length === 0) {
-                    document.querySelector('.cart-items-list').innerHTML = `
-                        <div class="empty-cart">
-                            <div class="empty-cart-icon">🛒</div>
-                            <h3 class="empty-cart-message">Ваша корзина пуста</h3>
-                            <a href="index.html" class="continue-shopping">Продолжить покупки</a>
-                        </div>
-                    `;
-                    document.querySelector('.order-summary').style.display = 'none';
-                }
-            }
-            
-            // Функция для правильного склонения слова "товар"
-            function getNoun(number, one, two, five) {
-                let n = Math.abs(number);
-                n %= 100;
-                if (n >= 5 && n <= 20) {
-                    return five;
-                }
-                n %= 10;
-                if (n === 1) {
-                    return one;
-                }
-                if (n >= 2 && n <= 4) {
-                    return two;
-                }
-                return five;
-            }
+
+            const userId = JSON.parse(localStorage.getItem('user')).id;
+            const response = await fetch(`php/get_cart_items.php?user_id=${userId}`);
+            const data = await response.json();
+
+            renderCartItems(data.items);
+            updateCartTotal(data.total);
+        } catch (error) {
+            console.error('Ошибка загрузки корзины:', error);
+        }
+    }
+
+    // Отрисовка товаров в корзине
+    function renderCartItems(items) {
+        const container = document.getElementById('cartItems');
+        container.innerHTML = '';
+
+        if (!items || items.length === 0) {
+            container.innerHTML = '<p>Ваша корзина пуста</p>';
+            return;
+        }
+
+        items.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.className = 'cart-item';
+            itemElement.innerHTML = `
+                <img src="${item.image}" alt="${item.title}">
+                <h3>${item.title}</h3>
+                <p>${item.artist}</p>
+                <div class="cart-item-controls">
+                    <div class="quantity-controls">
+                        <button onclick="updateQuantity(${item.id}, -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="updateQuantity(${item.id}, 1)">+</button>
+                    </div>
+                    <div>${item.price * item.quantity} ₽</div>
+                    <button onclick="removeFromCart(${item.id})">Удалить</button>
+                </div>
+            `;
+            container.appendChild(itemElement);
         });
+    }
+
+    // Обновление общей суммы
+    function updateCartTotal(total) {
+        document.getElementById('cartTotal').textContent = total;
+    }
+
+    // Функции управления корзиной
+    async function updateQuantity(itemId, change) {
+        try {
+            const response = await fetch('php/update_cart_item.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    item_id: itemId,
+                    change: change
+                })
+            });
+            const result = await response.json();
+            
+            if (result.success) {
+                await loadCart(); // Перезагружаем корзину
+            } else {
+                alert(result.message || 'Ошибка обновления');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
+
+    async function removeFromCart(itemId) {
+        try {
+            const response = await fetch('php/remove_from_cart.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    item_id: itemId
+                })
+            });
+            const result = await response.json();
+            
+            if (result.success) {
+                await loadCart(); // Перезагружаем корзину
+            } else {
+                alert(result.message || 'Ошибка удаления');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
     </script>
 </body>
 </html>
