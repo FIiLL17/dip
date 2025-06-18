@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой профиль - KloudDisc</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap');
+        
+        :root {
+            --neon-pink: #FF4D79;
+            --neon-blue: #00F0FF;
+            --dark-bg: #0a0a1a;
+            --darker-bg: #050510;
+            --text-color: #e0e0ff;
+            --card-bg: rgba(20, 20, 40, 0.7);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles */
+        header {
+            margin: 0 auto;
+            display: flex;
+            width: 100%;
+            max-height: 100px;
+            height: 100px;
+            background-color: rgba(10, 10, 26, 0.9);
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            padding: 0 40px;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .header-left h1 {
+            color: transparent;
+            font-size: 42px;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 0 10px rgba(255, 77, 121, 0.3);
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .header-left a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .header-left a:hover {
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+        
+        .header-left a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-pink);
+            transition: width 0.3s ease;
+        }
+        
+        .header-left a:hover::after {
+            width: 100%;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .header-right a img {
+            height: 32px;
+            width: 32px;
+            filter: drop-shadow(0 0 5px var(--neon-pink));
+            transition: all 0.3s ease;
+        }
+        
+        .header-right a:hover img {
+            filter: drop-shadow(0 0 15px var(--neon-pink));
+            transform: scale(1.1);
+        }
+        
+        /* Main Profile Container */
+        .profile-container {
+            display: flex;
+            min-height: calc(100vh - 100px);
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        
+        /* User Sidebar */
+        .user-sidebar {
+            width: 300px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            margin-right: 40px;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .user-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+        
+        .profile-title {
+            font-size: 18px;
+            color: var(--neon-blue);
+            margin-bottom: 10px;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+        }
+        
+        .user-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: white;
+        }
+        
+        .user-email {
+            font-size: 16px;
+            color: #aaa;
+        }
+        
+        .profile-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: auto;
+        }
+        
+        .profile-tab {
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            text-align: left;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .profile-tab:hover {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--neon-blue);
+        }
+        
+        .profile-tab.active {
+            background: rgba(0, 240, 255, 0.2);
+            color: var(--neon-blue);
+            font-weight: bold;
+        }
+        
+        .profile-tab.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--neon-blue);
+            border-radius: 3px 0 0 3px;
+        }
+        
+        .logout-btn {
+            padding: 15px;
+            background: rgba(255, 77, 121, 0.2);
+            border: 1px solid var(--neon-pink);
+            color: var(--neon-pink);
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255, 77, 121, 0.3);
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        .tab-content h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: var(--neon-blue);
+            font-family: 'Orbitron', sans-serif;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        /* Account Details */
+        .account-details {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .account-label {
+            font-size: 18px;
+            color: #aaa;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 5px;
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+        
+        .form-control[readonly] {
+            background: rgba(255, 255, 255, 0.05);
+            color: #888;
+        }
+        
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .btn-primary {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        /* Vinyl List (for orders and favorites) */
+        .vinyl-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .vinyl-card {
+            background: rgba(30, 30, 60, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .vinyl-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 240, 255, 0.2);
+            border-color: var(--neon-blue);
+        }
+        
+        .vinyl-cover {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        
+        .vinyl-info {
+            padding: 20px;
+        }
+        
+        .vinyl-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: white;
+        }
+        
+        .vinyl-artist {
+            font-size: 16px;
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+        
+        .vinyl-price {
+            font-size: 18px;
+            color: var(--neon-blue);
+            font-weight: bold;
+        }
+        
+        .order-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #FFC107;
+        }
+        
+        .status-completed {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+        
+        /* Payment Methods */
+        .payment-method {
+            background: rgba(30, 30, 60, 0.5);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .payment-method:hover {
+            border-color: var(--neon-blue);
+        }
+        
+        .payment-details {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .card-number {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+        
+        .card-expiry {
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        .remove-card {
+            background: rgba(255, 77, 121, 0.2);
+            border: 1px solid var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .remove-card:hover {
+            background: rgba(255, 77, 121, 0.3);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .profile-container {
+                flex-direction: column;
+            }
+            
+            .user-sidebar {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 30px;
+            }
+            
+            .account-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .account-label {
+                margin-top: 10px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 0 20px;
+                height: 80px;
+            }
+            
+            .header-left h1 {
+                font-size: 32px;
+            }
+            
+            .header-left a {
+                font-size: 18px;
+            }
+            
+            .profile-container {
+                padding: 20px;
+            }
+            
+            .vinyl-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h1>KloudDisc</h1>
+            <a href="index.html">Главная</a>
+            <a href="#">Магазин</a>
+            <a href="#">О нас</a>
+        </div>
+        <div class="header-right">
+            <a href="#"><img src="img/icon/звёздочка.png" alt="Избранное"></a>
+            <a href="#"><img src="img/icon/магазин.png" alt="Корзина"></a>
+        </div>
+    </header>
+
+    <div class="profile-container">
+        <div class="user-sidebar">
+            <div class="user-header">
+                <div class="user-avatar" id="userAvatar">JD</div>
+                <div class="user-info">
+                    <h3 class="profile-title">МОЙ ПРОФИЛЬ</h3>
+                    <p class="user-name" id="userName">John Doe</p>
+                    <p class="user-email" id="userEmail">john.doe@example.com</p>
+                </div>
+            </div>
+            
+            <div class="profile-tabs">
+                <button class="profile-tab active" data-tab="account">Детали аккаунта</button>
+                <button class="profile-tab" data-tab="orders">Мои заказы</button>
+                <button class="profile-tab" data-tab="favorites">Избранное</button>
+                <button class="profile-tab" data-tab="payment">Метод оплаты</button>
+            </div>
+            
+            <button class="logout-btn" onclick="logout()">Выйти</button>
+        </div>
+        
+        <div class="tab-content">
+            <!-- Детали аккаунта -->
+            <div id="account" class="tab-pane active">
+                <h2>Детали аккаунта</h2>
+                <div class="account-details">
+                    <div class="account-label">ФИО:</div>
+                    <div class="form-group">
+                        <input type="text" id="fullName" class="form-control" value="John Doe">
+                    </div>
+                    
+                    <div class="account-label">Email:</div>
+                    <div class="form-group">
+                        <input type="email" id="email" class="form-control" value="john.doe@example.com" readonly>
+                    </div>
+                    
+                    <div class="account-label">Телефон:</div>
+                    <div class="form-group">
+                        <input type="tel" id="phone" class="form-control" value="+7 (123) 456-7890">
+                    </div>
+                    
+                    <div class="account-label">Адрес доставки:</div>
+                    <div class="form-group">
+                        <textarea id="address" class="form-control" rows="3">123 Main St, Apt 4B, Moscow, Russia</textarea>
+                    </div>
+                    
+                    <div class="account-label">Дата регистрации:</div>
+                    <div class="form-group">
+                        <input type="text" id="regDate" class="form-control" value="15.05.2023" readonly>
+                    </div>
+                    
+                    <div style="grid-column: 2;">
+                        <button type="button" id="saveProfileBtn" class="btn btn-primary">Сохранить изменения</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Мои заказы -->
+            <div id="orders" class="tab-pane">
+                <h2>Мои заказы</h2>
+                <div class="vinyl-list" id="ordersList">
+                    <div class="vinyl-card">
+                        <img src="img/main-albom/6ZwlCGtYWdI.jpg" alt="Album Cover" class="vinyl-cover">
+                        <div class="vinyl-info">
+                            <div class="vinyl-title">Angel Of Small Death</div>
+                            <div class="vinyl-artist">Hozier</div>
+                            <div class="vinyl-price">2,499 ₽</div>
+                            <div class="order-status status-completed">Завершен</div>
+                        </div>
+                    </div>
+                    
+                    <div class="vinyl-card">
+                        <img src="img/main-albom/laIqhWYx68g.jpg" alt="Album Cover" class="vinyl-cover">
+                        <div class="vinyl-info">
+                            <div class="vinyl-title">Control</div>
+                            <div class="vinyl-artist">Biting Elbows</div>
+                            <div class="vinyl-price">1,999 ₽</div>
+                            <div class="order-status status-pending">В обработке</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Избранное -->
+            <div id="favorites" class="tab-pane">
+                <h2>Избранное</h2>
+                <div class="vinyl-list" id="favoritesList">
+                    <div class="vinyl-card">
+                        <img src="img/main-albom/_xQdZKn79bE.jpg" alt="Album Cover" class="vinyl-cover">
+                        <div class="vinyl-info">
+                            <div class="vinyl-title">Mercy</div>
+                            <div class="vinyl-artist">Dotan</div>
+                            <div class="vinyl-price">2,199 ₽</div>
+                        </div>
+                    </div>
+                    
+                    <div class="vinyl-card">
+                        <img src="img/main-albom/TIuQVmYDG2E.jpg" alt="Album Cover" class="vinyl-cover">
+                        <div class="vinyl-info">
+                            <div class="vinyl-title">Je te laisserai des mots</div>
+                            <div class="vinyl-artist">IRSNa, Paré</div>
+                            <div class="vinyl-price">1,799 ₽</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Метод оплаты -->
+            <div id="payment" class="tab-pane">
+                <h2>Метод оплаты</h2>
+                <div id="paymentMethodsList">
+                    <div class="payment-method">
+                        <div class="payment-details">
+                            <div class="card-icon">💳</div>
+                            <div>
+                                <div class="card-number">•••• •••• •••• 4242</div>
+                                <div class="card-expiry">Срок: 12/25</div>
+                            </div>
+                        </div>
+                        <button class="remove-card">Удалить</button>
+                    </div>
+                </div>
+                
+                <div id="paymentForm" style="margin-top: 30px; max-width: 500px;">
+                    <h3>Добавить карту</h3>
+                    <div class="account-details">
+                        <div class="account-label">Номер карты:</div>
+                        <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456">
+                        
+                        <div class="account-label">Имя владельца:</div>
+                        <input type="text" id="cardHolder" class="form-control" placeholder="IVAN IVANOV">
+                        
+                        <div class="account-label">Срок действия:</div>
+                        <input type="text" id="cardExpiry" class="form-control" placeholder="MM/YY">
+                        
+                        <div class="account-label">CVV:</div>
+                        <input type="text" id="cardCvv" class="form-control" placeholder="123">
+                        
+                        <div style="grid-column: 2;">
+                            <button type="button" id="savePaymentMethodBtn" class="btn btn-primary">Сохранить карту</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Проверка авторизации
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        // Заполняем основную информацию
+        document.getElementById('userName').textContent = user.name || user.email;
+        document.getElementById('userEmail').textContent = user.email;
+        document.getElementById('userAvatar').textContent = (user.name || user.email).charAt(0).toUpperCase();
+
+        // Инициализация вкладок
+        const tabs = document.querySelectorAll('.profile-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Удаляем активный класс у всех вкладок
+                tabs.forEach(t => t.classList.remove('active'));
+                // Добавляем активный класс текущей вкладке
+                this.classList.add('active');
+                
+                // Скрываем все содержимое вкладок
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.remove('active');
+                });
+                
+                // Показываем содержимое активной вкладки
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+                
+                // Загружаем данные для вкладки
+                loadTabContent(tabId);
+            });
+        });
+
+        // Загружаем данные для активной вкладки
+        loadTabContent('account');
+        
+        // Обработчик сохранения профиля
+        document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
+    });
+
+    function loadTabContent(tabId) {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) return;
+
+        switch(tabId) {
+            case 'account':
+                loadProfileData(user.id);
+                break;
+            case 'orders':
+                loadOrders(user.id);
+                break;
+            case 'favorites':
+                loadFavorites(user.id);
+                break;
+            case 'payment':
+                loadPaymentMethods(user.id);
+                break;
+                case 'payment':
+    loadPaymentMethods(user.id);
+    break;
+
+        }
+    }
+
+     function loadProfileData(userId) {
+        fetch(`php/get-profile.php?user_id=${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Заполняем данные пользователя
+                    document.getElementById('userName').textContent = data.profile.full_name || data.profile.email;
+                    document.getElementById('userEmail').textContent = data.profile.email;
+                    document.getElementById('userAvatar').textContent = 
+                        (data.profile.full_name || data.profile.email).charAt(0).toUpperCase();
+                    
+                    // Заполняем форму
+                    document.getElementById('fullName').value = data.profile.full_name || '';
+                    document.getElementById('email').value = data.profile.email;
+                    document.getElementById('phone').value = data.profile.phone || '';
+                    document.getElementById('address').value = data.profile.address || '';
+                    
+                    // Форматируем дату регистрации
+                    const regDate = new Date(data.profile.registration_date);
+                    document.getElementById('regDate').value = regDate.toLocaleDateString('ru-RU', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки профиля:', error);
+                alert('Не удалось загрузить данные профиля');
+            });
+    }
+    function loadOrders(userId) {
+        const ordersList = document.getElementById('ordersList');
+        ordersList.innerHTML = `
+            <div class="vinyl-card">
+                <img src="img/vinyls/hozier.jpg" alt="Hozier" class="vinyl-image">
+                <div class="vinyl-info">
+                    <h3 class="vinyl-title">Angel Of Small Death</h3>
+                    <p class="vinyl-artist">Hozier</p>
+                    <div class="vinyl-price">2 499 ₽</div>
+                    <p>Статус: Доставлен</p>
+                    <p>Дата заказа: 15.05.2023</p>
+                </div>
+            </div>
+            <div class="vinyl-card">
+                <img src="img/vinyls/kooks.jpg" alt="The Kooks" class="vinyl-image">
+                <div class="vinyl-info">
+                    <h3 class="vinyl-title">Melody Maker</h3>
+                    <p class="vinyl-artist">The Kooks</p>
+                    <div class="vinyl-price">2 199 ₽</div>
+                    <p>Статус: В обработке</p>
+                    <p>Дата заказа: 10.06.2023</p>
+                </div>
+            </div>
+        `;
+    }
+
+    function loadFavorites(userId) {
+        const favoritesList = document.getElementById('favoritesList');
+        favoritesList.innerHTML = `
+            <div class="vinyl-card">
+                <img src="img/vinyls/dotan.jpg" alt="Dotan" class="vinyl-image">
+                <div class="vinyl-info">
+                    <h3 class="vinyl-title">Mercy</h3>
+                    <p class="vinyl-artist">Dotan</p>
+                    <div class="vinyl-price">2 299 ₽</div>
+                    <button class="btn btn-danger">Удалить из избранного</button>
+                </div>
+            </div>
+            <div class="vinyl-card">
+                <img src="img/main-albom/_xQdZKn79bE.jpg" alt="Biting Elbows" class="vinyl-image">
+                <div class="vinyl-info">
+                    <h3 class="vinyl-title">Control</h3>
+                    <p class="vinyl-artist">Biting Elbows</p>
+                    <div class="vinyl-price">2 599 ₽</div>
+                    <button class="btn btn-danger">Удалить из избранного</button>
+                </div>
+            </div>
+        `;
+    }
+
+function loadPaymentMethods(userId) {
+    const paymentMethodsList = document.getElementById('paymentMethodsList');
+    
+    fetch(`php/get-payment-methods.php?user_id=${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.methods.length > 0) {
+                paymentMethodsList.innerHTML = data.methods.map(method => `
+                    <div class="payment-method">
+                        <div class="payment-details">
+                            <div class="card-icon">💳</div>
+                            <div>
+                                <div class="card-number">•••• •••• •••• ${method.last_four}</div>
+                                <div class="card-expiry">${method.card_type}</div>
+                            </div>
+                        </div>
+                        <button class="remove-card" onclick="deletePaymentMethod(${method.id})">Удалить</button>
+                    </div>
+                `).join('');
+            } else {
+                paymentMethodsList.innerHTML = '<p>У вас нет сохраненных карт</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки карт:', error);
+            paymentMethodsList.innerHTML = '<p>Ошибка загрузки карт</p>';
+        });
+}
+
+function showPaymentForm() {
+    document.getElementById('paymentForm').style.display = 'block';
+    document.getElementById('addCardBtn').style.display = 'none';
+}
+
+function renderPaymentMethods(methods) {
+    const container = document.getElementById('paymentMethodsList');
+    container.innerHTML = methods.map(method => `
+        <div class="payment-card">
+            <div>•••• •••• •••• ${method.last_four}</div>
+            <div>${method.card_type}</div>
+            <button onclick="deletePaymentMethod(${method.id})">Удалить</button>
+        </div>
+    `).join('');
+}
+
+function savePaymentMethod() {
+    const paymentForm = document.getElementById('paymentForm');
+    if (!paymentForm) {
+        console.error('Форма оплаты не найдена');
+        return;
+    }
+
+    const paymentData = {
+        card_number: document.getElementById('cardNumber').value.trim(),
+        card_holder: document.getElementById('cardHolder').value.trim(),
+        card_expiry: document.getElementById('cardExpiry').value.trim(),
+        card_cvv: document.getElementById('cardCvv').value.trim()
+    };
+
+    fetch('php/save-payment-method.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(paymentData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Очищаем форму
+            document.getElementById('cardNumber').value = '';
+            document.getElementById('cardHolder').value = '';
+            document.getElementById('cardExpiry').value = '';
+            document.getElementById('cardCvv').value = '';
+            
+            // Обновляем список карт
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) loadPaymentMethods(user.id);
+            
+            alert('Карта успешно добавлена!');
+        } else {
+            alert('Ошибка: ' + (data.error || 'Не удалось сохранить карту'));
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('Ошибка соединения с сервером');
+    });
+}
+
+function deletePaymentMethod(methodId) {
+    if (!confirm('Вы уверены, что хотите удалить этот метод оплаты?')) return;
+
+    fetch(`php/delete-payment-method.php?id=${methodId}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Метод оплаты удален');
+            const user = JSON.parse(localStorage.getItem('user'));
+            loadPaymentMethods(user.id);
+        } else {
+            alert('Ошибка удаления: ' + (data.message || 'Неизвестная ошибка'));
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('Ошибка соединения с сервером');
+    });
+}
+
+    function saveProfile() {
+    const profileData = {
+        full_name: document.getElementById('fullName').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        address: document.getElementById('address').value.trim()
+    };
+
+    fetch('php/save-profile.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => { throw new Error(text) });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            alert('Данные успешно сохранены');
+            // Обновляем отображение
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                user.name = profileData.full_name || user.email;
+                localStorage.setItem('user', JSON.stringify(user));
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+            }
+        } else {
+            alert('Ошибка: ' + (data.message || 'Не удалось сохранить данные'));
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('Ошибка сервера. Проверьте консоль для деталей.');
+    });
+}
+    
+    function logout() {
+        fetch('php/logout.php')
+            .then(() => {
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            })
+            .catch(error => console.error('Ошибка выхода:', error));
+    }
+    document.getElementById('savePaymentMethodBtn').addEventListener('click', savePaymentMethod);
+    </script>
+</body>
+</html>
