@@ -267,7 +267,6 @@
     text-decoration: none;
     color: inherit;
 }
-
     </style>
 </head>
 <body>
@@ -502,309 +501,179 @@
 
     <script src="js/musicVinil.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
    
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Инициализация счетчиков
-    updateCounters();
-    
-    // Обработчики для всех кнопок избранного
-    document.querySelectorAll('.albom-icons a:nth-child(2)').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const album = this.closest('.albom');
-            addToFavorites(
-                album.querySelector('img').src,
-                album.querySelector('h3').textContent,
-                album.querySelector('p').textContent
-            );
-        });
-    });
-    
-    // Обработчики для всех кнопок корзины
-    document.querySelectorAll('.albom-icons a:nth-child(3)').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const album = this.closest('.albom');
-            addToCart(
-                album.querySelector('img').src,
-                album.querySelector('h3').textContent,
-                album.querySelector('p').textContent,
-                1999 // Здесь можно указать реальную цену
-            );
-        });
+// Только инициализация и проверка
+console.log('Проверка функций:');
+console.log('addToCart is', typeof addToCart);
+console.log('testAddToCart is', typeof testAddToCart);
+
+// Обработчики для кнопок корзины
+document.querySelectorAll('.cart-btn').forEach(btn => {
+    btn.addEventListener('click', async function(e) {
+        e.preventDefault();
+        const album = {
+            title: this.closest('.albom').querySelector('h3').textContent,
+            artist: this.closest('.albom').querySelector('p').textContent,
+            image: this.closest('.albom').querySelector('img').src,
+            price: 1999 // или получайте реальную цену
+        };
+        await addToCart(album);
     });
 });
-
-// Функция добавления в избранное
-function addToFavorites(image, title, artist) {
-    if (!isUserLoggedIn()) {
-        showAuthModal();
-        return;
-    }
-    
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    
-    // Проверяем, нет ли уже этого альбома в избранном
-    if (!favorites.some(item => item.image === image)) {
-        favorites.push({ image, title, artist });
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        updateCounters();
-        showNotification('Альбом добавлен в избранное');
-    }
-}
-
-// Функция добавления в корзину
-function addToCart(image, title, artist, price) {
-    if (!isUserLoggedIn()) {
-        showAuthModal();
-        return;
-    }
-    
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const existingItem = cart.find(item => item.image === image);
-    
-    if (existingItem) {
-        existingItem.quantity += 1;
-    } else {
-        cart.push({ image, title, artist, price, quantity: 1 });
-    }
-    
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCounters();
-    showNotification('Альбом добавлен в корзину');
-}
-
-// Обновление счетчиков в шапке
-function updateCounters() {
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    
-    document.getElementById('favoritesCount').textContent = favorites.length;
-    document.getElementById('cartCount').textContent = cart.reduce((total, item) => total + item.quantity, 0);
-}
-
-// Проверка авторизации
-function isUserLoggedIn() {
-    return localStorage.getItem('user') !== null;
-}
-
-// Всплывающее уведомление
-function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
-}
-
 document.addEventListener('DOMContentLoaded', function() {
-    // Обработчики для избранного (звездочка)
-    document.querySelectorAll('.favorite-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation(); // Предотвращаем всплытие
-            
-            const album = this.closest('.albom');
-            addToFavorites(
-                album.querySelector('img').src,
-                album.querySelector('h3').textContent,
-                album.querySelector('p').textContent
-            );
-        });
-    });
+    // ======================
+    // ОСНОВНЫЕ ФУНКЦИИ
+    // ======================
     
-    // Обработчики для корзины (магазин)
-    document.querySelectorAll('.cart-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation(); // Предотвращаем всплытие
-            
-            const album = this.closest('.albom');
-            addToCart(
-                album.querySelector('img').src,
-                album.querySelector('h3').textContent,
-                album.querySelector('p').textContent,
-                1999 // Укажите реальную цену
-            );
-        });
-    });
-    
-    // Обработчик для предотвращения скролла при клике на ссылки
-    document.querySelectorAll('.albom-icons a').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        });
-    });
-});
-
-// Функция добавления в избранное
-function addToFavorites(image, title, artist) {
-    if (!isUserLoggedIn()) {
-        showAuthModal();
-        return;
+    function isUserLoggedIn() {
+        return localStorage.getItem('user') !== null;
     }
-    
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    
-    if (!favorites.some(item => item.image === image)) {
-        favorites.push({ image, title, artist });
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        updateCounters();
-        showNotification('Альбом добавлен в избранное');
+
+    function showAuthModal() {
+        document.getElementById('authModal').style.display = 'block';
+    }
+
+    // ======================
+    // ФУНКЦИИ ИЗБРАННОГО
+    // ======================
+
+    async function addToFavorites(album) {
+        try {
+            console.log("Добавляем в избранное:", album);
+            
+            const response = await fetch('php/add_to_favorites.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(album)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                showNotification('Добавлено в избранное!');
+                updateFavoritesCount();
+            } else {
+                showNotification(result.message || 'Ошибка добавления', true);
+            }
+            
+        } catch (error) {
+            console.error('Ошибка:', error);
+            showNotification('Ошибка соединения', true);
+        }
+    }
+
+    function updateFavoritesCount() {
+        if (!isUserLoggedIn()) {
+            document.getElementById('favoritesCount').textContent = '0';
+            return;
+        }
         
-        // Анимация иконки
-        animateIcon(this.querySelector('img'), 'favorite');
+        fetch(`php/get_favorites_count.php?user_id=${JSON.parse(localStorage.getItem('user')).id}`)
+            .then(response => response.json())
+            .then(data => {
+                const counter = document.getElementById('favoritesCount');
+                if (counter) counter.textContent = data.count || '0';
+            })
+            .catch(console.error);
     }
-}
 
-// Функция добавления в корзину
-function addToCart(image, title, artist, price) {
-    if (!isUserLoggedIn()) {
-        showAuthModal();
-        return;
+    // ======================
+    // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+    // ======================
+
+    function showNotification(message, isError = false) {
+        const notification = document.createElement('div');
+        notification.className = `notification ${isError ? 'error' : ''}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
     }
-    
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const existingItem = cart.find(item => item.image === image);
-    
-    if (existingItem) {
-        existingItem.quantity += 1;
-    } else {
-        cart.push({ image, title, artist, price, quantity: 1 });
+
+    function animateIcon(icon, type) {
+        if (!icon) return;
+        
+        icon.style.transform = 'scale(1.3)';
+        icon.style.transition = 'transform 0.3s, filter 0.3s';
+        
+        if (type === 'favorite') {
+            icon.style.filter = 'brightness(1.2) drop-shadow(0 0 8px rgba(255, 215, 0, 0.7))';
+        } else {
+            icon.style.filter = 'brightness(1.2) drop-shadow(0 0 8px rgba(76, 201, 240, 0.7))';
+        }
+        
+        setTimeout(() => {
+            icon.style.transform = 'scale(1)';
+            icon.style.filter = 'none';
+        }, 300);
     }
-    
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCounters();
-    showNotification('Альбом добавлен в корзину');
-    
-    // Анимация иконки
-    animateIcon(this.querySelector('img'), 'cart');
-}
-document.addEventListener('DOMContentLoaded', function() {
-    // Единый обработчик для всех кнопок
+
+    // ======================
+    // ОБРАБОТЧИКИ СОБЫТИЙ
+    // ======================
+
+    // Обработчики для кнопок альбомов
     document.querySelectorAll('.albom').forEach(album => {
         const albumData = {
             image: album.querySelector('img').src,
             title: album.querySelector('h3').textContent,
             artist: album.querySelector('p').textContent,
-            price: 1999 // Укажите реальную цену
+            price: 1999
         };
         
-        album.querySelectorAll('.icon-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
+        // Кнопка избранного
+        const favBtn = album.querySelector('.favorite-btn');
+        if (favBtn) {
+            favBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
-                const action = this.getAttribute('data-action');
-                
-                switch(action) {
-                    case 'play':
-                        playAlbum(albumData);
-                        break;
-                    case 'favorite':
-                        addToFavorites(albumData);
-                        break;
-                    case 'cart':
-                        addToCart(albumData);
-                        break;
-                }
+                animateIcon(this.querySelector('img'), 'favorite');
+                await addToFavorites(albumData);
             });
-        });
+        }
+        
+        // Кнопка воспроизведения
+        const playBtn = album.querySelector('.play-btn');
+        if (playBtn) {
+            playBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Playing:', albumData.title);
+            });
+        }
     });
+
+    // Закрытие модального окна
+    const closeBtn = document.querySelector('.auth-close-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            document.getElementById('authModal').style.display = 'none';
+        });
+    }
+
+    // Кнопка профиля
+    const profileBtn = document.getElementById('userProfileBtn');
+    if (profileBtn) {
+        profileBtn.addEventListener('click', function() {
+            if (isUserLoggedIn()) {
+                window.location.href = 'profile.php';
+            } else {
+                showAuthModal();
+            }
+        });
+    }
+
+    // Инициализация при загрузке
+    if (isUserLoggedIn()) {
+        updateFavoritesCount();
+    }
 });
-
-// Функция воспроизведения
-function playAlbum(album) {
-    console.log('Playing:', album.title);
-    // Ваш код для воспроизведения
-}
-
-// Функция добавления в избранное
-function addToFavorites(album) {
-    if (!isUserLoggedIn()) {
-        showAuthModal();
-        return;
-    }
-    
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    
-    if (!favorites.some(item => item.image === album.image)) {
-        favorites.push(album);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        updateCounters();
-        showNotification(`"${album.title}" добавлен в избранное`);
-        animateIcon(this, 'favorite');
-    } else {
-        showNotification('Этот альбом уже в избранном');
-    }
-}
-
-// Функция добавления в корзину
-function addToCart(album) {
-    if (!isUserLoggedIn()) {
-        showAuthModal();
-        return;
-    }
-    
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const existingItem = cart.find(item => item.image === album.image);
-    
-    if (existingItem) {
-        existingItem.quantity += 1;
-    } else {
-        cart.push({...album, quantity: 1});
-    }
-    
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCounters();
-    showNotification(`"${album.title}" добавлен в корзину`);
-    animateIcon(this, 'cart');
-}
-
-// Проверка авторизации
-function isUserLoggedIn() {
-    return localStorage.getItem('user') !== null;
-}
-
-// Анимация иконки
-function animateIcon(btn, type) {
-    const icon = btn.querySelector('img');
-    icon.style.transform = 'scale(1.3)';
-    icon.style.transition = 'transform 0.3s';
-    
-    if (type === 'favorite') {
-        icon.style.filter = 'brightness(1.2) drop-shadow(0 0 8px rgba(255, 215, 0, 0.7))';
-    } else {
-        icon.style.filter = 'brightness(1.2) drop-shadow(0 0 8px rgba(76, 201, 240, 0.7))';
-    }
-    
-    setTimeout(() => {
-        icon.style.transform = 'scale(1)';
-        icon.style.filter = 'none';
-    }, 300);
-}
-
-// Анимация иконки при добавлении
-function animateIcon(icon, type) {
-    icon.style.transform = 'scale(1.5)';
-    icon.style.transition = 'transform 0.3s';
-    
-    if (type === 'favorite') {
-        icon.style.filter = 'brightness(1.5) drop-shadow(0 0 5px gold)';
-    } else {
-        icon.style.filter = 'brightness(1.5) drop-shadow(0 0 5px #4cc9f0)';
-    }
-    
-    setTimeout(() => {
-        icon.style.transform = 'scale(1)';
-        icon.style.filter = 'none';
-    }, 300);
-}
 </script>
 </body>
 </html>
