@@ -1,0 +1,27 @@
+Array
+(
+    [session] => no session
+    [post] => Array
+        (
+        )
+
+    [input] => {"album_id":{"image":"http://klouddisc1/img/main-albom/laIqhWYx68g.jpg","title":"Control","artist":"Biting Elbows","price":1999}}
+)
+Array
+(
+    [session] => no session
+    [post] => Array
+        (
+        )
+
+    [input] => {"album_id":{"image":"http://klouddisc1/img/main-albom/laIqhWYx68g.jpg","title":"Control","artist":"Biting Elbows","price":1999}}
+)
+Array
+(
+    [session] => no session
+    [post] => Array
+        (
+        )
+
+    [input] => {"album_id":{"image":"http://klouddisc1/img/main-albom/laIqhWYx68g.jpg","title":"Control","artist":"Biting Elbows","price":1999}}
+)
